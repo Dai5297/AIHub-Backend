@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dai.mapper.ChatMapper">
+
+    <resultMap id="titleVo" type="com.dai.vo.TitleVo">
+        <result property="id" column="memory_id"/>
+        <result property="title" column="title"/>
+    </resultMap>
+
+    <resultMap id="historyVo" type="com.dai.vo.HistoryVo">
+        <result property="sender" column="role"/>
+        <result property="content" column="content"/>
+    </resultMap>
+    <insert id="saveHistory">
+        INSERT INTO chat_message (memory_id, role, content)
+        VALUES (#{memoryId}, #{role}, #{content})
+    </insert>
+
+    <insert id="saveTitle">
+        INSERT INTO chat_title (user_id, memory_id, title)
+        VALUES (#{userId}, #{memoryId}, #{title})
+    </insert>
+
+    <delete id="deleteHistory">
+        DELETE FROM chat_message WHERE memory_id = #{memoryId}
+    </delete>
+
+    <update id="updateTitle">
+        update chat_title set title = #{title} where memory_id = #{memoryId}
+    </update>
+
+    <delete id="deleteTitle">
+        DELETE FROM chat_title WHERE memory_id = #{memoryId}
+    </delete>
+
+    <select id="getUserTitles" resultMap="titleVo">
+        SELECT memory_id, title FROM aihub.chat_title t1
+            INNER JOIN aihub.user t2 ON t1.user_id = t2.id
+        WHERE t2.id = #{UserId}
+        ORDER BY t1.id DESC
+    </select>
+
+    <select id="getHistoryDetails" resultMap="historyVo">
+        SELECT aihub.chat_message.role, aihub.chat_message.content from aihub.chat_message
+        WHERE aihub.chat_message.memory_id = #{memotyId}
+    </select>
+</mapper>
