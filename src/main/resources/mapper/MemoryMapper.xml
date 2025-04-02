@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dai.mapper.MemoryMapper">
+
+    <insert id="saveMemory">
+        INSERT INTO aihub.memory (session_id, content) VALUES (#{sessionId}, #{content})
+    </insert>
+
+    <update id="updateMemory">
+        UPDATE aihub.memory SET content = #{content} WHERE session_id = #{sessionId}
+    </update>
+
+    <select id="getMemory" resultType="java.lang.String">
+        SELECT content FROM aihub.memory WHERE session_id = #{memoryId}
+    </select>
+</mapper>

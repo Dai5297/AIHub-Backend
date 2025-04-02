@@ -1,6 +1,7 @@
 package com.dai.service.impl;
 
 import cn.hutool.json.JSONUtil;
+import com.dai.config.ChatAssistantConfig;
 import com.dai.dto.ChatDto;
 import com.dai.entity.History;
 import com.dai.entity.Title;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Flux;
 import com.dai.config.CommonAssistantConfig.CommonAssistant;
 import com.dai.config.ChatAssistantConfig.ChatAssistant;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,6 +28,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatAssistant chatAssistant;
+
+    @Autowired
+    private ChatAssistantConfig.ChatWebAssistant chatWebAssistant;
 
     @Autowired
     private CommonAssistant commonAssistant;
@@ -49,11 +54,32 @@ public class ChatServiceImpl implements ChatService {
                         .build())
         );
 
-        // 处理AI响应流
+        if (chatDto.isOnlineSearch()) {
+            return Flux.create(sink -> {
+                StringBuilder responseBuilder = new StringBuilder("<p>");
+
+                chatWebAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage(), LocalDate.now().toString())
+                        .onPartialResponse(partial -> {
+                            responseBuilder.append(partial);
+                            sink.next(partial);
+                        })
+                        .onCompleteResponse(complete -> {
+                            chatMapper.saveHistory(History.builder()
+                                    .memoryId(chatDto.getMemoryId())
+                                    .role("ai")
+                                    .content(responseBuilder + "</p>")
+                                    .build());
+                            sink.complete();
+                        })
+                        .onError(sink::error)
+                        .start();
+            });
+        }
+
         return Flux.create(sink -> {
             StringBuilder responseBuilder = new StringBuilder("<p>");
 
-            chatAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage())
+            chatAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage(), LocalDate.now().toString())
                     .onPartialResponse(partial -> {
                         responseBuilder.append(partial);
                         sink.next(partial);
@@ -69,6 +95,8 @@ public class ChatServiceImpl implements ChatService {
                     .onError(sink::error)
                     .start();
         });
+
+
     }
 
 

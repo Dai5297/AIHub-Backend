@@ -8,4 +8,6 @@ public class ChatDto {
     private String memoryId;
 
     private String message;
+
+    private boolean isOnlineSearch;
 }
