@@ -1,6 +1,5 @@
 package com.dai.config;
 
-import com.dai.annotate.DynamicDateMessage;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
@@ -69,7 +68,7 @@ public class ChatAssistantConfig {
 
         SearchApiWebSearchEngine engine = SearchApiWebSearchEngine.builder()
                         .engine("google")
-                        .apiKey("5FMz5NQp17LgvidLHvDxQ78r")
+                        .apiKey(System.getenv("SEARCHAPI_API_KEY"))
                         .build();
 
         return AiServices.builder(ChatWebAssistant.class)
