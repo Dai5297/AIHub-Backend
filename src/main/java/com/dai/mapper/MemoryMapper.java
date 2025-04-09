@@ -8,7 +8,9 @@ public interface MemoryMapper {
 
     String getMemory(@Param("memoryId") String memoryId);
 
-    void updateMemory(@Param("sessionId") String sessionId, @Param("content") String content);
+    void updateMemory(@Param("memoryId") String sessionId, @Param("content") String content);
 
-    void saveMemory(@Param("sessionId") String sessionId, @Param("content") String content);
+    void saveMemory(@Param("memoryId") String sessionId, @Param("content") String content);
+
+    void deleteMemory(@Param("memoryId") String string);
 }

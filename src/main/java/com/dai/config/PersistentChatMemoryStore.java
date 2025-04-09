@@ -39,6 +39,6 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
 
     @Override
     public void deleteMessages(Object o) {
-
+        memoryMapper.deleteMemory(o.toString());
     }
 }

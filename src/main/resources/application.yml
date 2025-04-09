@@ -18,7 +18,11 @@ spring:
       test-while-idle: true
       test-on-borrow: true
       test-on-return: true
-
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: 20050918
 langchain4j:
   community:
     dashscope:

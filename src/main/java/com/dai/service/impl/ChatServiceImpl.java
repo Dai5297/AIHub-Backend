@@ -2,6 +2,7 @@ package com.dai.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.dai.config.ChatAssistantConfig;
+import com.dai.config.PersistentChatMemoryStore;
 import com.dai.dto.ChatDto;
 import com.dai.entity.History;
 import com.dai.entity.Title;
@@ -37,6 +38,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatMapper chatMapper;
+
+    @Autowired
+    private PersistentChatMemoryStore chatMemoryStore;
 
     @Override
     public Flux<String> chatAI(ChatDto chatDto) {
@@ -154,5 +158,6 @@ public class ChatServiceImpl implements ChatService {
     public void deleteHistory(Long memoryId) {
         chatMapper.deleteHistory(memoryId);
         chatMapper.deleteTitle(memoryId);
+        chatMemoryStore.deleteMessages(memoryId);
     }
 }

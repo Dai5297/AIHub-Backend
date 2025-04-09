@@ -106,6 +106,19 @@
             <version>2.0.52</version>
         </dependency>
 
+        <!-- Neo4j -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-neo4j</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+
+        <!-- Neo4j Driver -->
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+        </dependency>
+
         <!-- langchain -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
