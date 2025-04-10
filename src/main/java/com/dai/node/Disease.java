@@ -1,6 +1,5 @@
-package com.dai.entity;
+package com.dai.node;
 
-import dev.langchain4j.agent.tool.P;
 import lombok.Data;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
