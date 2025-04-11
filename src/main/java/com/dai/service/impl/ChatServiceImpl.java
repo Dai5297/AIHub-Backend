@@ -16,7 +16,7 @@ import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import com.dai.config.CommonAssistantConfig.CommonAssistant;
+import com.dai.config.TitleAssistantConfig.TitleAssistant;
 import com.dai.config.ChatAssistantConfig.ChatAssistant;
 
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public class ChatServiceImpl implements ChatService {
     private ChatAssistantConfig.ChatWebAssistant chatWebAssistant;
 
     @Autowired
-    private CommonAssistant commonAssistant;
+    private TitleAssistant titleAssistant;
 
     @Autowired
     private ChatMapper chatMapper;
@@ -106,7 +106,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public String generateTitle(ChatDto chatDto) {
-        String title = commonAssistant.chat(chatDto.getMessage());
+        String title = titleAssistant.chat(chatDto.getMessage());
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
         Long id = userVo.getId();

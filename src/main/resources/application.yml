@@ -47,3 +47,10 @@ dai:
     jwt:
       base64-encoded-secret-key: $2a$10$PVtHnkj86mJgf6li/yron.LRx/cQAlaiZkBJ9BeogCNTryXJRT1YC
       ttl: 3600000
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          neo4j=DEBUG:

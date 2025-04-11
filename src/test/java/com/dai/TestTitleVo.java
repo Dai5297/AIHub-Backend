@@ -1,6 +1,6 @@
 package com.dai;
 
-import com.dai.config.CommonAssistantConfig;
+import com.dai.config.TitleAssistantConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,11 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TestTitleVo {
 
     @Autowired
-    private CommonAssistantConfig.CommonAssistant commonAssistant;
+    private TitleAssistantConfig.TitleAssistant titleAssistant;
 
     @Test
     public void test() {
-        System.out.println(commonAssistant.chat("帮我写个游戏"));
+        System.out.println(titleAssistant.chat("帮我写个游戏"));
     }
 
     @Test

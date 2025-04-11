@@ -1,7 +1,7 @@
 package com.dai.service.impl;
 
 import cn.hutool.json.JSONUtil;
-import com.dai.config.CommonAssistantConfig.CommonAssistant;
+import com.dai.config.TitleAssistantConfig.TitleAssistant;
 import com.dai.config.MedicalAssistantConfig.MedicalAssistant;
 import com.dai.config.PersistentChatMemoryStore;
 import com.dai.dto.ChatDto;
@@ -26,7 +26,7 @@ public class MedicalServiceImpl implements MedicalService {
     private MedicalAssistant medicalAssistant;
 
     @Autowired
-    private CommonAssistant commonAssistant;
+    private TitleAssistant titleAssistant;
 
     @Autowired
     private MedicalMapper medicalMapper;
@@ -66,7 +66,7 @@ public class MedicalServiceImpl implements MedicalService {
 
     @Override
     public String generateTitle(ChatDto chatDto) {
-        String title = commonAssistant.chat(chatDto.getMessage());
+        String title = titleAssistant.chat(chatDto.getMessage());
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
         Long id = userVo.getId();

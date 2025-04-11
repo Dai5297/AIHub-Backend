@@ -1,5 +1,6 @@
 package com.dai.config;
 
+import com.dai.constant.SystemMessages;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
@@ -21,22 +22,12 @@ public class ChatAssistantConfig {
     private StreamingChatLanguageModel model;
 
     public interface ChatAssistant {
-        @SystemMessage("""
-        你的名字叫AI助手，你可以帮助用户解决各种问题，
-        对应用户的问题如果你不知道答案则委婉的拒绝用户，禁止编制数据用于任何回答
-        如果用户的问题与日期有关要结合今天的日期 {{current_date}}
-        请以中文回答。
-        """)
+        @SystemMessage(SystemMessages.CHAT_SYSTEM_MESSAGE)
         TokenStream chat(@MemoryId String id, @UserMessage String message, @V("current_date") String currentDate);
     }
 
     public interface ChatWebAssistant {
-        @SystemMessage("""
-        你的名字叫AI助手，你可以帮助用户解决各种问题，
-        对于用户的问题你需要联网搜索获取相关信息后再回答
-        所有联网搜索的回答都要给用户提供回答依据{{current_date}}
-        请以中文回答。
-        """)
+        @SystemMessage(SystemMessages.CHAT_WEB_SYSTEM_MESSAGE)
         TokenStream chat(@MemoryId String id, @UserMessage String message, @V("current_date") String currentDate);
     }
 

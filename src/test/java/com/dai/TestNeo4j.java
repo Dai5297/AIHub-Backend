@@ -17,5 +17,8 @@ public class TestNeo4j {
 //        System.out.println(diseaseByDesc);
 //        List<Disease> all = diseaseRepository.findByName();
 //        System.out.println(all);
+        System.out.println(diseaseRepository.getAvoidFood("肺炎"));
+//        System.out.println(diseaseRepository.getDiseaseDetails("肺炎"));
+        System.out.println(diseaseRepository.getCommonDrug("肺炎"));
     }
 }
