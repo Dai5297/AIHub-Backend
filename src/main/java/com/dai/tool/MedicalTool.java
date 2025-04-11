@@ -2,26 +2,22 @@ package com.dai.tool;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.dai.entity.ToolResult;
-import com.dai.node.Check;
-import com.dai.node.Disease;
-import com.dai.node.Drug;
-import com.dai.node.Food;
+import com.dai.node.*;
 import com.dai.repository.DiseaseRepository;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.model.output.structured.Description;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
 @Description("用于获取医疗相关的内容用于回答用户医疗相关问题")
 @Component
+@RequiredArgsConstructor
 public class MedicalTool {
 
-    @Autowired
-    private DiseaseRepository diseaseRepository;
+    private final DiseaseRepository diseaseRepository;
 
     @Tool("根据疾病名获取疾病信息")
     public ToolResult<Disease> getDiseaseDetails(@P("疾病名称") String diseaseName) {
@@ -70,7 +66,7 @@ public class MedicalTool {
 
     @Tool("根据疾病名获取疾病好评药品")
     public ToolResult<List<Drug>> getRecommendDrug(@P("疾病名称") String diseaseName) {
-        List<Drug> recommendDrug = diseaseRepository.getCommonDrug(diseaseName);
+        List<Drug> recommendDrug = diseaseRepository.getRecommendDrug(diseaseName);
         if (ObjectUtil.isNull(recommendDrug) || ObjectUtil.isEmpty(recommendDrug)) {
             ToolResult.error("未查询到相关信息");
         }
@@ -87,6 +83,15 @@ public class MedicalTool {
             return ToolResult.error("未查询到相关信息");
         }
         return ToolResult.success(diseasesBySymptom);
+    }
+
+    @Tool("获取疾病的伴随症状")
+    public ToolResult<List<Symptom>> getSymptomByDisease(@P("疾病名称") String diseaseName) {
+        List<Symptom> symptomByDisease = diseaseRepository.getSymptomByDisease(diseaseName);
+        if (ObjectUtil.isNull(symptomByDisease) || ObjectUtil.isEmpty(symptomByDisease)) {
+            return ToolResult.error("未查询到相关信息");
+        }
+        return ToolResult.success(symptomByDisease);
     }
 
     @Tool("根据疾病推荐检查项目")

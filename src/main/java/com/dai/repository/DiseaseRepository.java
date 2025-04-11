@@ -1,9 +1,6 @@
 package com.dai.repository;
 
-import com.dai.node.Check;
-import com.dai.node.Disease;
-import com.dai.node.Drug;
-import com.dai.node.Food;
+import com.dai.node.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
@@ -50,7 +47,7 @@ public interface DiseaseRepository extends Neo4jRepository<Disease,Long> {
     /**
      * 根据疾病名获取疾病常用药品
      * @param name
-     * @name
+     * @return
      */
     @Query("MATCH (n:Disease)-[r:common_drug]->(m:Drug) WHERE n.name = $name RETURN m.name AS name")
     List<Drug> getCommonDrug(@Param("name") String name);
@@ -81,9 +78,17 @@ public interface DiseaseRepository extends Neo4jRepository<Disease,Long> {
 
     /**
      * 根据疾病名获取疾病推荐食物
-     * @param diseaseName
+     * @param name
      * @return
      */
     @Query("MATCH (n:Disease)-[r:do_eat]->(m:Food) WHERE n.name = $name return m.name AS name")
-    List<Food> getDoEatFoods(String diseaseName);
+    List<Food> getDoEatFoods(@Param("name") String name);
+
+    /**
+     * 根据疾病名获取疾病伴随症状
+     * @param name
+     * @return
+     */
+    @Query("MATCH (n:Disease)-[r:has_symptom]-(m:Symptom) where n.name = $name RETURN m.name AS name")
+    List<Symptom> getSymptomByDisease(@Param("name") String name);
 }

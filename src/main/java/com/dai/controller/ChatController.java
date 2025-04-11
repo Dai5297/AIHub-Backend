@@ -5,7 +5,7 @@ import com.dai.vo.HistoryVo;
 import com.dai.entity.Result;
 import com.dai.vo.TitleVo;
 import com.dai.service.ChatService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -13,10 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ai/chat")
+@RequiredArgsConstructor
 public class ChatController {
 
-    @Autowired
-    private ChatService chatService;
+    private final ChatService chatService;
 
     @PostMapping()
     public Flux<String> chat(@RequestBody ChatDto chatDto) {

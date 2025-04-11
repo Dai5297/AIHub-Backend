@@ -8,21 +8,19 @@ import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.service.UserMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class ServiceAssistantConfig {
 
-    @Autowired
-    private QwenStreamingChatModel model;
+    private final QwenStreamingChatModel model;
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    @Autowired
-    private PersistentChatMemoryStore persistentChatMemoryStore;
+    private final PersistentChatMemoryStore persistentChatMemoryStore;
 
     public interface ServiceAssistant {
         TokenStream chat(@MemoryId String id, @UserMessage String message);
@@ -40,8 +38,7 @@ public class ServiceAssistantConfig {
         return AiServices.builder(ServiceAssistant.class)
                 .streamingChatLanguageModel(model)
                 .tools(customerService)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder().maxMessages(10)
-                        .id(memoryId).build())
+                .chatMemoryProvider(chatMemoryProvider)
                 .build();
 
     }

@@ -11,21 +11,19 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class PdfAssistantConfig {
 
-    @Autowired
-    private QwenEmbeddingModel embeddingModel;
+    private final QwenEmbeddingModel embeddingModel;
 
-    @Autowired
-    private QwenStreamingChatModel model;
+    private final QwenStreamingChatModel model;
 
-    @Autowired
-    private PersistentChatMemoryStore persistentChatMemoryStore;
+    private final PersistentChatMemoryStore persistentChatMemoryStore;
 
     public interface PDFAssistant{
         TokenStream chat(@MemoryId String memoryId, @MemoryId String prompt);
@@ -55,8 +53,7 @@ public class PdfAssistantConfig {
 
         return AiServices.builder(PDFAssistant.class)
                 .streamingChatLanguageModel(model)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder().maxMessages(10)
-                        .id(memoryId).build())
+                .chatMemoryProvider(chatMemoryProvider)
                 .contentRetriever(contentRetriever)
                 .build();
     }

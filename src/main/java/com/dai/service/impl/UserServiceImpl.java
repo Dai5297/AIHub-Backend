@@ -8,20 +8,19 @@ import com.dai.service.UserService;
 import com.dai.utils.JwtUtil;
 import com.dai.utils.UserThreadLocal;
 import com.dai.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    private JwtTokenManagerProperties jwtTokenManagerProperties;
+    private final JwtTokenManagerProperties jwtTokenManagerProperties;
 
     @Override
     public UserVo login(UserDto userDto) {
@@ -37,7 +36,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVo getUserDetail() {
         String subject = UserThreadLocal.getSubject();
-        UserVo userVo = JSONUtil.toBean(subject, UserVo.class);
-        return userVo;
+        return JSONUtil.toBean(subject, UserVo.class);
     }
 }

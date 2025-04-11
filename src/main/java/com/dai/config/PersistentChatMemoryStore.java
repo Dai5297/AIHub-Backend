@@ -1,23 +1,21 @@
 package com.dai.config;
 
-import com.dai.mapper.ChatMapper;
 import com.dai.mapper.MemoryMapper;
-import com.dai.vo.HistoryVo;
 import dev.langchain4j.data.message.*;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 获取数据库中的对话历史
  */
 @Configuration
+@RequiredArgsConstructor
 public class PersistentChatMemoryStore implements ChatMemoryStore {
-    @Autowired
-    private MemoryMapper memoryMapper;
+
+    private final MemoryMapper memoryMapper;
 
     @Override
     public List<ChatMessage> getMessages(Object o) {

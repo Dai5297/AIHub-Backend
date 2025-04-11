@@ -6,21 +6,19 @@ import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class MedicalAssistantConfig {
 
-    @Autowired
-    private PersistentChatMemoryStore persistentChatMemoryStore;
+    private final PersistentChatMemoryStore persistentChatMemoryStore;
 
-    @Autowired
-    private StreamingChatLanguageModel model;
+    private final StreamingChatLanguageModel model;
 
-    @Autowired
-    private MedicalTool medicalTool;
+    private final MedicalTool medicalTool;
 
     public interface MedicalAssistant {
 

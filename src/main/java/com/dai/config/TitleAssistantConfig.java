@@ -4,15 +4,15 @@ import com.dai.constant.SystemMessages;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.SystemMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class TitleAssistantConfig {
 
-    @Autowired
-    private ChatLanguageModel model;
+    private final ChatLanguageModel model;
 
     public interface TitleAssistant {
         @SystemMessage(SystemMessages.TITLE_SYSTEM_MESSAGE)

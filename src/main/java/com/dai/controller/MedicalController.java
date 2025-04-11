@@ -5,7 +5,7 @@ import com.dai.entity.Result;
 import com.dai.service.MedicalService;
 import com.dai.vo.HistoryVo;
 import com.dai.vo.TitleVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -13,10 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ai/medical")
+@RequiredArgsConstructor
 public class MedicalController {
 
-    @Autowired
-    private MedicalService medicalService;
+    private final MedicalService medicalService;
 
     @PostMapping()
     public Flux<String> chat(@RequestBody ChatDto chatDto) {

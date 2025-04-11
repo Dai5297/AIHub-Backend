@@ -52,12 +52,13 @@ public class JwtUtil {
     public static Claims parseJWT(String secretKey, String token) {
         try {
             // 得到DefaultJwtParser
-            Claims claims = Jwts.parser()
+            // 设置签名的秘钥
+            // 设置需要解析的jwt
+            return Jwts.parser()
                     // 设置签名的秘钥
                     .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
                     // 设置需要解析的jwt
                     .parseClaimsJws(token).getBody();
-            return claims;
         } catch (Exception e) {
 //            throw new AccessDeniedException("没有权限,请登录");
             throw new RuntimeException("没有权限,请登录");

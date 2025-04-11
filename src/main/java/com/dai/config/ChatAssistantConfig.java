@@ -7,19 +7,18 @@ import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.service.*;
 import dev.langchain4j.web.search.WebSearchTool;
 import dev.langchain4j.web.search.searchapi.SearchApiWebSearchEngine;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class ChatAssistantConfig {
 
 
-    @Autowired
-    private PersistentChatMemoryStore persistentChatMemoryStore;
+    private final PersistentChatMemoryStore persistentChatMemoryStore;
 
-    @Autowired
-    private StreamingChatLanguageModel model;
+    private final StreamingChatLanguageModel model;
 
     public interface ChatAssistant {
         @SystemMessage(SystemMessages.CHAT_SYSTEM_MESSAGE)

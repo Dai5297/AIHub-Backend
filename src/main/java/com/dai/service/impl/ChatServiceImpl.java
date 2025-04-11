@@ -13,7 +13,7 @@ import com.dai.service.ChatService;
 import com.dai.utils.UserThreadLocal;
 import com.dai.vo.UserVo;
 import io.micrometer.common.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import com.dai.config.TitleAssistantConfig.TitleAssistant;
@@ -25,22 +25,18 @@ import java.util.concurrent.CompletableFuture;
 
 
 @Service
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
-    @Autowired
-    private ChatAssistant chatAssistant;
+    private final ChatAssistant chatAssistant;
 
-    @Autowired
-    private ChatAssistantConfig.ChatWebAssistant chatWebAssistant;
+    private final ChatAssistantConfig.ChatWebAssistant chatWebAssistant;
 
-    @Autowired
-    private TitleAssistant titleAssistant;
+    private final TitleAssistant titleAssistant;
 
-    @Autowired
-    private ChatMapper chatMapper;
+    private final ChatMapper chatMapper;
 
-    @Autowired
-    private PersistentChatMemoryStore chatMemoryStore;
+    private final PersistentChatMemoryStore chatMemoryStore;
 
     @Override
     public Flux<String> chatAI(ChatDto chatDto) {
@@ -124,14 +120,12 @@ public class ChatServiceImpl implements ChatService {
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
         Long id = userVo.getId();
-        List<TitleVo> userHistories = chatMapper.getUserTitles(id);
-        return userHistories;
+        return chatMapper.getUserTitles(id);
     }
 
     @Override
     public List<HistoryVo> getHistoryById(Long id) {
-        List<HistoryVo> historyVoDetails = chatMapper.getHistoryDetails(id);
-        return historyVoDetails;
+        return chatMapper.getHistoryDetails(id);
     }
 
     @Override

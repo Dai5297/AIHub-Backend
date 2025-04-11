@@ -4,15 +4,15 @@ import com.dai.dto.UserDto;
 import com.dai.entity.Result;
 import com.dai.service.UserService;
 import com.dai.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/login")
     public Result login(@RequestBody UserDto userDto) {

@@ -7,32 +7,39 @@ import com.dai.utils.UserThreadLocal;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
+@RequiredArgsConstructor
 public class UserTokenIntercept implements HandlerInterceptor {
 
-    @Autowired
-    private JwtTokenManagerProperties jwtTokenManagerProperties;
+    private final JwtTokenManagerProperties jwtTokenManagerProperties;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty()){
+            response.setStatus(401);
             return false;
         }
-        Claims claims = JwtUtil.parseJWT(jwtTokenManagerProperties.getBase64EncodedSecretKey(), token);
-        if (!ObjectUtil.isEmpty(claims) && !ObjectUtil.isNull(claims)){
-            String jsonStr = String.valueOf(claims.get("user"));
-            UserThreadLocal.setSubject(jsonStr);
+        try {
+            Claims claims = JwtUtil.parseJWT(jwtTokenManagerProperties.getBase64EncodedSecretKey(), token);
+            if (!ObjectUtil.isEmpty(claims) && !ObjectUtil.isNull(claims)){
+                String jsonStr = String.valueOf(claims.get("user"));
+                UserThreadLocal.setSubject(jsonStr);
+            }
+            return true;
+        } catch (Exception e) {
+            response.setStatus(401);
+            return false;
         }
-        return true;
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler, Exception ex) {
         UserThreadLocal.removeSubject();
     }
 }

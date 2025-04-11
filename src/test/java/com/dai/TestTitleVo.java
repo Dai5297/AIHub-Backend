@@ -18,7 +18,6 @@ public class TestTitleVo {
 
     @Test
     public void test1() {
-//        System.out.println(System.getenv("TAVILY_API_KEY"));
         System.out.println(System.getenv("SEARCHAPI_API_KEY"));
     }
 }

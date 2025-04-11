@@ -13,26 +13,23 @@ import com.dai.utils.UserThreadLocal;
 import com.dai.vo.HistoryVo;
 import com.dai.vo.TitleVo;
 import com.dai.vo.UserVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MedicalServiceImpl implements MedicalService {
 
-    @Autowired
-    private MedicalAssistant medicalAssistant;
+    private final MedicalAssistant medicalAssistant;
 
-    @Autowired
-    private TitleAssistant titleAssistant;
+    private final TitleAssistant titleAssistant;
 
-    @Autowired
-    private MedicalMapper medicalMapper;
+    private final MedicalMapper medicalMapper;
 
-    @Autowired
-    private PersistentChatMemoryStore chatMemoryStore;
+    private final PersistentChatMemoryStore chatMemoryStore;
 
     @Override
     public Flux<String> chat(ChatDto chatDto) {
@@ -84,14 +81,12 @@ public class MedicalServiceImpl implements MedicalService {
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
         Long id = userVo.getId();
-        List<TitleVo> userHistories = medicalMapper.getUserTitles(id);
-        return userHistories;
+        return medicalMapper.getUserTitles(id);
     }
 
     @Override
     public List<HistoryVo> getHistoryById(Long id) {
-        List<HistoryVo> historyVoDetails = medicalMapper.getHistoryDetails(id);
-        return historyVoDetails;
+        return medicalMapper.getHistoryDetails(id);
     }
 
     @Override
