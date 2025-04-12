@@ -1,41 +1,36 @@
 package com.dai.service.impl;
 
 import cn.hutool.json.JSONUtil;
-import com.dai.config.ChatAssistantConfig;
 import com.dai.config.PersistentChatMemoryStore;
+import com.dai.config.TitleAssistantConfig.TitleAssistant;
+import com.dai.config.TravelAssistantConfig.TravelAssistant;
 import com.dai.dto.ChatDto;
 import com.dai.entity.History;
 import com.dai.entity.Title;
-import com.dai.vo.TitleVo;
-import com.dai.vo.HistoryVo;
-import com.dai.mapper.ChatMapper;
-import com.dai.service.ChatService;
+import com.dai.mapper.TravelMapper;
+import com.dai.service.TravelService;
 import com.dai.utils.UserThreadLocal;
+import com.dai.vo.HistoryVo;
+import com.dai.vo.TitleVo;
 import com.dai.vo.UserVo;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import com.dai.config.TitleAssistantConfig.TitleAssistant;
-import com.dai.config.ChatAssistantConfig.ChatAssistant;
-import com.dai.config.ChatAssistantConfig.ChatWebAssistant;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-
 @Service
 @RequiredArgsConstructor
-public class ChatServiceImpl implements ChatService {
+public class TravelServiceImpl implements TravelService {
 
-    private final ChatAssistant chatAssistant;
+    private final TravelMapper travelMapper;
 
-    private final ChatWebAssistant chatWebAssistant;
+    private final TravelAssistant travelAssistant;
 
     private final TitleAssistant titleAssistant;
-
-    private final ChatMapper chatMapper;
 
     private final PersistentChatMemoryStore chatMemoryStore;
 
@@ -48,45 +43,23 @@ public class ChatServiceImpl implements ChatService {
 
         // 异步保存用户消息
         CompletableFuture.runAsync(() ->
-                chatMapper.saveHistory(History.builder()
+                travelMapper.saveHistory(History.builder()
                         .memoryId(chatDto.getMemoryId())
                         .role("user")
                         .content(chatDto.getMessage())
                         .build())
         );
 
-        if (chatDto.isOnlineSearch()) {
-            return Flux.create(sink -> {
-                StringBuilder responseBuilder = new StringBuilder("<p>");
-
-                chatWebAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage(), LocalDate.now().toString())
-                        .onPartialResponse(partial -> {
-                            responseBuilder.append(partial);
-                            sink.next(partial);
-                        })
-                        .onCompleteResponse(complete -> {
-                            chatMapper.saveHistory(History.builder()
-                                    .memoryId(chatDto.getMemoryId())
-                                    .role("ai")
-                                    .content(responseBuilder + "</p>")
-                                    .build());
-                            sink.complete();
-                        })
-                        .onError(sink::error)
-                        .start();
-            });
-        }
-
         return Flux.create(sink -> {
             StringBuilder responseBuilder = new StringBuilder("<p>");
 
-            chatAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage(), LocalDate.now().toString())
+            travelAssistant.chat(chatDto.getMemoryId(), chatDto.getMessage(), LocalDate.now().toString())
                     .onPartialResponse(partial -> {
                         responseBuilder.append(partial);
                         sink.next(partial);
                     })
                     .onCompleteResponse(complete -> {
-                        chatMapper.saveHistory(History.builder()
+                        travelMapper.saveHistory(History.builder()
                                 .memoryId(chatDto.getMemoryId())
                                 .role("ai")
                                 .content(responseBuilder + "</p>")
@@ -96,13 +69,10 @@ public class ChatServiceImpl implements ChatService {
                     .onError(sink::error)
                     .start();
         });
-
-
     }
 
-
     @Override
-    public String generateTitle(ChatDto chatDto) {
+    public Object generateTitle(ChatDto chatDto) {
         String title = titleAssistant.chat(chatDto.getMessage());
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
@@ -112,7 +82,7 @@ public class ChatServiceImpl implements ChatService {
                 .userId(id)
                 .title(title)
                 .build();
-        chatMapper.updateTitle(newTitle);
+        travelMapper.updateTitle(newTitle);
         return title;
     }
 
@@ -121,12 +91,12 @@ public class ChatServiceImpl implements ChatService {
         String jsonStr = UserThreadLocal.getSubject();
         UserVo userVo = JSONUtil.toBean(jsonStr, UserVo.class);
         Long id = userVo.getId();
-        return chatMapper.getUserTitles(id);
+        return travelMapper.getUserTitles(id);
     }
 
     @Override
     public List<HistoryVo> getHistoryById(Long id) {
-        return chatMapper.getHistoryDetails(id);
+        return travelMapper.getHistoryDetails(id);
     }
 
     @Override
@@ -145,14 +115,14 @@ public class ChatServiceImpl implements ChatService {
         UserVo userVo = JSONUtil.toBean(UserThreadLocal.getSubject(), UserVo.class);
         title.setUserId(userVo.getId());
 
-        chatMapper.saveHistory(systemHistory);
-        chatMapper.saveTitle(title);
+        travelMapper.saveHistory(systemHistory);
+        travelMapper.saveTitle(title);
     }
 
     @Override
     public void deleteHistory(Long memoryId) {
-        chatMapper.deleteHistory(memoryId);
-        chatMapper.deleteTitle(memoryId);
+        travelMapper.deleteHistory(memoryId);
+        travelMapper.deleteTitle(memoryId);
         chatMemoryStore.deleteMessages(memoryId);
     }
 }

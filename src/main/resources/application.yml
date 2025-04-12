@@ -28,10 +28,10 @@ langchain4j:
     dashscope:
       chat-model:
         api-key : ${ALI_API_KEY}
-        model-name: qwen-max-2025-01-25
+        model-name: qwen-max
       streaming-chat-model:
         api-key: ${ALI_API_KEY}
-        model-name: qwq-32b
+        model-name: qwq-32b-preview
       embedding-model:
         api-key: ${ALI_API_KEY}
         model-name: text-embedding-v3
@@ -54,3 +54,10 @@ logging:
       springframework:
         data:
           neo4j=DEBUG:
+
+aliyun:
+  oss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    accessKeyId: ${OSS_ACCESS_KEY_ID}
+    accessKeySecret: ${OSS_ACCESS_KEY_SECRET}
+    bucketName: aihub-dai
