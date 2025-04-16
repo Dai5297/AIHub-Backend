@@ -17,4 +17,22 @@
     <select id="getMemory" resultType="java.lang.String">
         SELECT content FROM aihub.memory WHERE memory_id = #{memoryId}
     </select>
+
+    <select id="getMemoryType" resultType="java.lang.String">
+        SELECT 'chat_title' AS table_name
+        FROM chat_title
+        WHERE memory_id = #{memoryId}
+        UNION ALL
+        SELECT 'medical_title' AS table_name
+        FROM medical_title
+        WHERE memory_id = #{memoryId}
+        UNION ALL
+        SELECT 'travel_title' AS table_name
+        FROM travel_title
+        WHERE memory_id = #{memoryId}
+        UNION ALL
+        SELECT 'pdf_title' AS table_name
+        FROM pdf_title
+        WHERE memory_id = #{memoryId};
+    </select>
 </mapper>

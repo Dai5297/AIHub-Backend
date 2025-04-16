@@ -23,6 +23,10 @@ spring:
     authentication:
       username: neo4j
       password: 20050918
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 langchain4j:
   community:
     dashscope:
@@ -31,7 +35,7 @@ langchain4j:
         model-name: qwen-max
       streaming-chat-model:
         api-key: ${ALI_API_KEY}
-        model-name: qwq-32b-preview
+        model-name: qwen-max-2025-01-25
       embedding-model:
         api-key: ${ALI_API_KEY}
         model-name: text-embedding-v3
@@ -47,6 +51,9 @@ dai:
     jwt:
       base64-encoded-secret-key: $2a$10$PVtHnkj86mJgf6li/yron.LRx/cQAlaiZkBJ9BeogCNTryXJRT1YC
       ttl: 3600000
+  api:
+    amap-api: ${AMAP_API_KEY}
+    baidu-api: ${BAIDU_MAP_API_KEY}
 
 logging:
   level:

@@ -1,6 +1,7 @@
 package com.dai.controller;
 
 import com.dai.entity.Result;
+import com.dai.service.PdfService;
 import com.dai.utils.AliOSSUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,20 +19,14 @@ public class PdfController {
 
     private final AliOSSUtils aliOSSUtils;
 
+    private final PdfService pdfService;
+
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file) {
-        // 验证文件非空
-        if (file.isEmpty()) {
-            return Result.error();
-        }
-
-        String upload;
-
-        try {
-            upload = aliOSSUtils.upload(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return Result.success(upload);
+    public Result upload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("memoryId") String memoryId
+    ) {
+        pdfService.uploadFile(file, memoryId);
+        return Result.success();
     }
 }

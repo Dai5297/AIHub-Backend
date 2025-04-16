@@ -13,4 +13,6 @@ public interface MemoryMapper {
     void saveMemory(@Param("memoryId") String sessionId, @Param("content") String content);
 
     void deleteMemory(@Param("memoryId") String string);
+
+    String getMemoryType(@Param("memoryId") String memoryId);
 }
