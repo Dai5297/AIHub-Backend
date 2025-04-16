@@ -5,8 +5,8 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/aihub?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 050815
+    username:
+    password:
     druid:
       initial-size: 20
       min-idle: 20
@@ -21,8 +21,8 @@ spring:
   neo4j:
     uri: bolt://localhost:7687
     authentication:
-      username: neo4j
-      password: 20050918
+      username:
+      password:
   servlet:
     multipart:
       max-file-size: 10MB
