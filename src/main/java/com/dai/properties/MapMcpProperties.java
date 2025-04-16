@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @ToString
 @Configuration
 @ConfigurationProperties(prefix = "dai.api")
-public class MapApiProperties {
+public class MapMcpProperties {
 
     /**
      * 高德APIKEY
@@ -24,4 +24,9 @@ public class MapApiProperties {
      * 百度APIKEY
      */
     private String baiduApi;
+
+    /**
+     * MCP服务器存储位置
+     */
+    private String mcpServer;
 }

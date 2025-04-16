@@ -1,7 +1,7 @@
 package com.dai.config;
 
 import com.dai.constant.SystemMessages;
-import com.dai.properties.MapApiProperties;
+import com.dai.properties.MapMcpProperties;
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.mcp.client.DefaultMcpClient;
@@ -28,7 +28,7 @@ public class TravelAssistantConfig {
 
     private final PersistentChatMemoryStore persistentChatMemoryStore;
 
-    private final MapApiProperties apiProperties;
+    private final MapMcpProperties mcpProperties;
 
     public interface TravelAssistant {
         @SystemMessage(SystemMessages.TRAVEL_SYSTEM_MESSAGE)
@@ -44,12 +44,12 @@ public class TravelAssistantConfig {
                         "-Dspring.ai.mcp.server.stdio=true",
                         "-Dlogging.pattern.console=",
                         "-jar",
-                        "D:\\AIHub\\Mcp\\target\\Mcp-0.0.1-SNAPSHOT.jar"
+                        mcpProperties.getMcpServer()
                 ))
                 .logEvents(true)  // 保留日志记录以便调试
                 .environment(Map.of(
-                        "AMAP_API_KEY", apiProperties.getAmapApi(),
-                        "BAIDU_MAP_API_KEY", apiProperties.getBaiduApi()
+                        "AMAP_API_KEY", mcpProperties.getAmapApi(),
+                        "BAIDU_MAP_API_KEY", mcpProperties.getBaiduApi()
                 ))
                 .build();
 

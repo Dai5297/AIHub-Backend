@@ -54,6 +54,7 @@ dai:
   api:
     amap-api: ${AMAP_API_KEY}
     baidu-api: ${BAIDU_MAP_API_KEY}
+    mcp-server: "D:\AIHub\Mcp\target\Mcp-0.0.1-SNAPSHOT.jar"
 
 logging:
   level:
