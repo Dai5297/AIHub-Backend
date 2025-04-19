@@ -93,7 +93,7 @@ public class MedicalServiceImpl implements MedicalService {
     public void newChat(Long memoryId) {
         History systemHistory = History.builder()
                 .memoryId(String.valueOf(memoryId))
-                .role("system") // 修改角色为 system
+                .role("ai") // 修改角色为 system
                 .content("您好, 我是你的AI智能助手，有什么我能帮助你的吗？")
                 .build();
 

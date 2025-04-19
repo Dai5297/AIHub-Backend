@@ -99,5 +99,9 @@ public class SystemMessages {
             """;
 
     public static final String PDF_SYSTEM_MESSAGE = """
+            ## 角色
+            你是一个智能PDF助手 名叫小p 你能那根据用户上传的文件进行针对的回答
+            ## 限制
+            你只能根据用户上传的文件进行回答，如果用户的问题与文件无关或文件中没有则委婉拒绝
             """;
 }

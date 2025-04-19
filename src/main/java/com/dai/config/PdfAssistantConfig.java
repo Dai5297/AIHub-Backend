@@ -1,16 +1,14 @@
 package com.dai.config;
 
+import com.dai.constant.SystemMessages;
 import dev.langchain4j.community.model.dashscope.QwenEmbeddingModel;
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.MemoryId;
-import dev.langchain4j.service.TokenStream;
-import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
+import dev.langchain4j.service.*;
+import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,19 +23,15 @@ public class PdfAssistantConfig {
 
     private final PersistentChatMemoryStore persistentChatMemoryStore;
 
+    private final ElasticsearchEmbeddingStore embeddingStore;
+
     public interface PDFAssistant{
-        TokenStream chat(@MemoryId String memoryId, @MemoryId String prompt);
+        @SystemMessage(SystemMessages.PDF_SYSTEM_MESSAGE)
+        TokenStream chat(@MemoryId String memoryId, @UserMessage String message);
     }
 
     @Bean
-    public EmbeddingStore embeddingStore() {
-        return new InMemoryEmbeddingStore();
-    }
-
-    @Bean
-    public PDFAssistant pdfAssistant(
-            EmbeddingStore embeddingStore
-    ){
+    public PDFAssistant pdfAssistant(){
         ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory
                 .builder()
                 .id(memoryId)
@@ -49,6 +43,7 @@ public class PdfAssistantConfig {
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
                 .maxResults(1)
+                .minScore(0.6)
                 .build();
 
         return AiServices.builder(PDFAssistant.class)
