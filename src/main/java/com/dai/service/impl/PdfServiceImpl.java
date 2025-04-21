@@ -23,7 +23,7 @@ import dev.langchain4j.data.document.splitter.DocumentByCharacterSplitter;
 import dev.langchain4j.data.document.splitter.DocumentByRegexSplitter;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
-import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
+import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class PdfServiceImpl implements PdfService {
 
     private final AliOSSUtils ossUtils;
 
-    private final ElasticsearchEmbeddingStore embeddingStore;
+    private final PgVectorEmbeddingStore embeddingStore;
 
     private final EmbeddingModel embeddingModel;
 

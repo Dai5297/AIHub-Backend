@@ -15,13 +15,17 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dai.pdf")
 public class PdfProperties {
 
-    /**
-     * ES地址
-     */
     private String host;
 
-    /**
-     * index名称
-     */
-    private String indexName;
+    private String dataBase;
+
+    private Integer port;
+
+    private String user;
+
+    private String password;
+
+    private String table;
+
+    private Integer dimension;
 }

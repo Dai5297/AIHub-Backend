@@ -9,6 +9,7 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.*;
 import dev.langchain4j.store.embedding.elasticsearch.ElasticsearchEmbeddingStore;
+import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,7 @@ public class PdfAssistantConfig {
 
     private final PersistentChatMemoryStore persistentChatMemoryStore;
 
-    private final ElasticsearchEmbeddingStore embeddingStore;
+    private final PgVectorEmbeddingStore pgVectorEmbeddingStore;
 
     public interface PDFAssistant{
         @SystemMessage(SystemMessages.PDF_SYSTEM_MESSAGE)
@@ -40,7 +41,7 @@ public class PdfAssistantConfig {
                 .build();
 
         ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore)
+                .embeddingStore(pgVectorEmbeddingStore)
                 .embeddingModel(embeddingModel)
                 .maxResults(1)
                 .minScore(0.6)
