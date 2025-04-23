@@ -1,6 +1,7 @@
 # AIHub-Backend
 
 AIHub后端项目，提供用户认证、通用聊天助手、医疗助手专家、出行助手和PDF文档助手等功能。
+AIHUB前端项目 [传送门](https://github.com/Dai5297/AIHub-Frontend)
 
 ## 模块介绍
 
