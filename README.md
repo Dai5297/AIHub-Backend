@@ -2,7 +2,7 @@
 
 - AIHub后端项目，提供用户认证、通用聊天助手、医疗助手专家、出行助手和PDF文档助手等功能。
 - AIHUB前端项目 [传送门](https://github.com/Dai5297/AIHub-Frontend)
-- 项目在线地址: [传送门](https://aihub.daiai.top)  账号: admin  密码: 123456 
+- 项目在线地址: [传送门](https://aihub.daiai.top)
 
 ## 模块介绍
 
